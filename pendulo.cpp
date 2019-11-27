@@ -42,23 +42,38 @@ void euler_cromer(Pendulum & p,double dt,double t, double &omega);
 int main(int argc, char** argv)
 {
   Pendulum p;
+  Pendulum p2;
   double omega_repite = 0.0;
   double t=0.0;//Time 
   int N = atoi(argv[1]);//steps of evolution
   double fd_new = atof(argv[2]);
   // intialization
   initial_conditions(p, fd_new);
-  std::ofstream outfile;
-  outfile.open("puntos.dat");
   for (int ii=1; ii<=N; ii++)
     {
       double omega_repite = 0.0;
       euler_cromer(p,dt,t, omega_repite);
-      std::cout << t << "\t" << p.Theta << "\t" << p.W  << std::endl;
       t+=dt;
-      outfile << omega_repite << std::endl;
+      
     }
-    outfile.close();
+    std::cout << t << "\t" << p.Theta << "\t" << p.W  << std::endl;
+   
+    
+    //segundo punto
+    initial_conditions(p2, fd_new);
+    std::ofstream outfile;
+    outfile.open("segundo.dat");
+    double deltaF = 0.01;
+    for (double F = 1.35;F<1.50;F+=deltaF)
+    {
+        for (int ii=1; ii<=N; ii++)
+        {
+      euler_cromer(p2,dt,t, omega_repite);
+      t+=dt;
+        } 
+      outfile << F << "\t" << p2.Theta << "\t" << p2.W << std::endl;
+    }
+     outfile.close();
   return 0;
 }
 
